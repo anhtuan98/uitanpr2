@@ -144,12 +144,10 @@ public class MainActivity extends Activity implements OnTaskCompleted {
 			}
 
 			utils = new Utils(getBaseContext());
+
+            // Preparing for storing plate region
 			platePointList = new ArrayList<Point>();
-
-
 		}
-
-
 	}
 
 	@Override
@@ -169,7 +167,6 @@ public class MainActivity extends Activity implements OnTaskCompleted {
 	}
 
     // This class is for Viewing a detected plate
-
 	public class PlateView extends View implements Camera.PreviewCallback,
 			OnTaskCompleted {
 		public static final int SUBSAMPLING_FACTOR = 4;
@@ -191,17 +188,15 @@ public class MainActivity extends Activity implements OnTaskCompleted {
                 // are there any plate on it ?
 				processImage(data, size.width, size.height);
 				camera.addCallbackBuffer(data);
-
 			} catch (RuntimeException e) {
 				// The camera has probably just been released, ignore.
+                Log.e(TAG,e.toString());
 			}
 		}
 
 		protected void processImage(byte[] data, int width, int height) {
 
-
 			// First, downsample our image and convert it into a grayscale
-
 			int f = SUBSAMPLING_FACTOR;
 			mRgba = new Mat(height, width, CvType.CV_8UC4);
 			mGray = new Mat(height, width, CvType.CV_8UC1);
@@ -259,7 +254,6 @@ public class MainActivity extends Activity implements OnTaskCompleted {
 
                     // Draw a Green Rectangle surrounding the Number Plate !
                     // Congratulations ! You found the plate area :-)
-
 					canvas.drawRect(x, y, (x + w), (y + h), paint);
 
                     Log.i("Plate found"," Found a plate !!!");
@@ -282,28 +276,26 @@ public class MainActivity extends Activity implements OnTaskCompleted {
 				}
 
 				// If isHasNewPlate --> get sub images (ROI) --> Add to Adapter
-				// (from
-				// currentPlates)
+				// (from currentPlates)
 				if ((isHasNewPlate || isFail) && !isRunningTask) {
 					Log.e(TAG, "START DoOCR task!!!!");
-					//new DoOCR(currentPlates, mRgba, this).execute(); // Tuan 3/5/2015 commented
 				}
 			}
 		}
 
 		public void updateResult(String result) {
-			// TODO Auto-generated method stub
-
-			foundNumberPlate.setText(result);
+			/*  This function is not completed yet
+			    We will add the Neural network to recognize
+			    the numbers, characters in the plate later
+            */
+            foundNumberPlate.setText(result);
 
 		}
 
 	}
 
 	public void updateResult(String result) {
-		// TODO Auto-generated method stub
-
-		foundNumberPlate.setText(result);
+	 foundNumberPlate.setText(result);
 	}
 
 
